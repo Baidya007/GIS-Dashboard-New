@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Simple GIS Dashboard</title>
+  <title>Simple GIS Map</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Leaflet CSS & JS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+e2t2jG1jfgzHf4AjmDRH5kNoHkLZHL5rfT/PgF3g="
+    crossorigin=""
+  />
   <style>
     body { margin: 0; padding: 0; }
-    #map { height: 100vh; }
+    #map { height: 100vh; width: 100vw; }
   </style>
 </head>
 <body>
 
   <div id="map"></div>
 
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1j7kPZs+i1zspxAeYqKlfY0O3xQ2PzH9b2pWzJz8="
+    crossorigin=""
+  ></script>
+
   <script>
-    // Create the map
     var map = L.map('map').setView([20.59, 78.96], 5); // India center
 
-    // Add OpenStreetMap base layer
+    // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Optional: Add a marker
+    // Add a marker
     L.marker([28.6139, 77.2090]).addTo(map)
       .bindPopup("New Delhi")
       .openPopup();
   </script>
-
 </body>
 </html>
