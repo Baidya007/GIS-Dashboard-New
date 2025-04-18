@@ -1,37 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Simple GIS Dashboard</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  var map = L.map('map').setView([20.59, 78.96], 5);
 
-  <!-- Leaflet CSS & JS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
 
-  <style>
-    body { margin: 0; padding: 0; }
-    #map { height: 100vh; }
-  </style>
-</head>
-<body>
+  // Add New Delhi marker
+  L.marker([28.6139, 77.2090]).addTo(map)
+    .bindPopup("New Delhi")
+    .openPopup();
 
-  <div id="map"></div>
+  // ✅ Add GeoJSON layer of Indian states
+  fetch("https://raw.githubusercontent.com/geohacker/india/master/state/india_states.geojson")
+    .then(response => response.json())
+    .then(data => {
+      L.geoJSON(data, {
+        style: {
+          color: "#3388ff",
+          weight: 2,
+          fillOpacity: 0.1
+        },
+        onEachFeature: function (feature, layer) {
+          layer.bindPopup(`<b>${feature.properties.st_nm}</b>`);
+        }
+      }).addTo(map);
+    });
 
-  <script>
-    // Create the map
-    var map = L.map('map').setView([20.59, 78.96], 5); // India center
-
-    // Add OpenStreetMap base layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Optional: Add a marker
-    L.marker([28.6139, 77.2090]).addTo(map)
-      .bindPopup("New Delhi")
-      .openPopup();
-  </script>
-
-</body>
-</html>
+  // ✅ Click to get lat/lng
+  map.on('click', function(e) {
+    const lat = e.latlng.lat.toFixed(5);
+    const lng = e.latlng.lng.toFixed(5);
+    L.popup()
+      .setLatLng(e.latlng)
+      .setContent(`Lat: ${lat}, Lng: ${lng}`)
+      .openOn(map);
+  });
+</script>
